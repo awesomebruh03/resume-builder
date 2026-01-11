@@ -1,10 +1,8 @@
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{svelte,js}",
-  ],
+  content: ['./index.html', './src/**/*.{svelte,js}'],
   theme: {
     extend: {},
   },
-  plugins: [],
-}
+  plugins: [require('daisyui')],
+};
+
