@@ -4,14 +4,27 @@
   import RightSidebar from './lib/components/RightSidebar.svelte';
 </script>
 
-<main class="flex flex-row h-screen w-full overflow-hidden bg-gray-900 text-white">
-  
+<main
+  class="flex flex-row h-screen w-full overflow-hidden bg-gray-900 text-white"
+>
   <LeftSidebar />
 
-  <div class="flex-1 h-full overflow-auto relative flex justify-center p-10 bg-[#1a1a1a]">
-     <Preview />
+  <div
+    class="flex-1 h-full overflow-auto relative flex justify-center p-10 bg-[#1a1a1a] scrollbar-hide"
+  >
+    <Preview />
   </div>
 
   <RightSidebar />
-
 </main>
+
+<style>
+  /* Hide scrollbar for a cleaner UI */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

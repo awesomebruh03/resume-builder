@@ -3,7 +3,7 @@
   import Sidebar from './ui/Sidebar.svelte';
 </script>
 
-<Sidebar>
+<Sidebar side="right">
   <Card title="this is right sidebar"></Card>
   <Card title="this is right sidebar"></Card>
   <Card title="this is right sidebar"></Card>
