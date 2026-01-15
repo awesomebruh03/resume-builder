@@ -354,6 +354,11 @@ caniuse-lite@^1.0.30001759, caniuse-lite@^1.0.30001760:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001764.tgz#03206c56469f236103b90f9ae10bcb8b9e1f6005"
   integrity sha512-9JGuzl2M+vPL+pz70gtMF9sHdMFbY9FJaQBi186cHKH3pSzDvzoUJUPV6fqiKIMyXbud9ZLg4F3Yza1vJ1+93g==
 
+colord@^2.9.3:
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/colord/-/colord-2.9.3.tgz#4f8ce919de456f1d5c1c368c307fe20f3e59fb43"
+  integrity sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==
+
 crelt@^1.0.0:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/crelt/-/crelt-1.0.6.tgz#7cc898ea74e190fb6ef9dae57f8f81cf7302df72"
@@ -948,6 +953,24 @@ supports-preserve-symlinks-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
+
+svelte-awesome-color-picker@3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/svelte-awesome-color-picker/-/svelte-awesome-color-picker-3.1.4.tgz#06198c93127c29633d2052d50c8995da9baf5c2c"
+  integrity sha512-tiFakxvSpCwodOSFW6CflnLVSldSlDY77rDipHfW7hvB+4gTP3y6uO+Dm9O9e7P5N7K+CNyNjjdjbZOHYkMyNQ==
+  dependencies:
+    colord "^2.9.3"
+    svelte-awesome-slider "^1.1.2"
+
+svelte-awesome-slider@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/svelte-awesome-slider/-/svelte-awesome-slider-1.1.2.tgz#9d09453d35d232030e483c7968c11fa583e78b55"
+  integrity sha512-HFIWwq6rtX6aXyc6ns2R0P6pDLYIr6nRjTPyAddAiTAgZqsohAoEfOEwKKqMmZ6Q+CH48zzcFdyo6lFkBJvyQw==
+
+svelte-dnd-action@^0.9.69:
+  version "0.9.69"
+  resolved "https://registry.yarnpkg.com/svelte-dnd-action/-/svelte-dnd-action-0.9.69.tgz#5799b98981c7e8f1c15567d9115770af8704e255"
+  integrity sha512-NAmSOH7htJoYraTQvr+q5whlIuVoq88vEuHr4NcFgscDRUxfWPPxgie2OoxepBCQCikrXZV4pqV86aun60wVyw==
 
 svelte-hmr@^0.15.1:
   version "0.15.3"

@@ -6,7 +6,7 @@
   
   <aside class="w-[32%] bg-slate-100 p-8 flex flex-col gap-8 border-r border-slate-200">
     
-    <div class="text-sm flex flex-col gap-3 break-words">
+    <div class="text-sm flex flex-col gap-3 wrap-break-word">
       <div class="font-bold text-slate-500 uppercase tracking-widest text-xs border-b border-slate-300 pb-2 mb-1">Contact</div>
       
       {#if $resume.basics.email}

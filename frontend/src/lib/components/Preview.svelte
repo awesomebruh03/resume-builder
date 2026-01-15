@@ -1,35 +1,90 @@
 <script>
+  // 1. Import ALL Templates
+  import TemplateIvy from './templates/TemplateIvy.svelte';
+  import TemplateHighPerformer from './templates/TemplateHighPerformer.svelte';
   import TemplateMinimal from './templates/TemplateMinimal.svelte';
   import TemplateModern from './templates/TemplateModern.svelte';
 
-  // In a real app, this would be stored in the 'resumeStore' too 
-  // so the selected template is saved.
-  let selectedTemplate = 'minimal'; 
+  // Default selection
+  let selectedTemplate = 'ivy';
 </script>
 
-<div class="flex flex-col items-center gap-4">
-  
-  <div class="flex gap-2 p-2 bg-gray-800 rounded-lg">
-    <button 
-      class="px-4 py-2 text-white rounded text-sm {selectedTemplate === 'minimal' ? 'bg-amber-500 font-bold' : 'hover:bg-gray-700'}" 
-      on:click={() => selectedTemplate = 'minimal'}
+<div class="flex flex-col items-center h-full w-full bg-[#0e0e0e]">
+  <div
+    class="sticky top-4 z-50 flex gap-2 p-1.5 bg-[#18181b] border border-[#27272a] rounded-full shadow-xl mb-4"
+  >
+    <button
+      class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200
+      {selectedTemplate === 'ivy'
+        ? 'bg-white text-black shadow-sm'
+        : 'text-gray-400 hover:text-white hover:bg-white/5'}"
+      on:click={() => (selectedTemplate = 'ivy')}
     >
-      Minimalist
+      Ivy League
     </button>
-    <button 
-      class="px-4 py-2 text-white rounded text-sm {selectedTemplate === 'modern' ? 'bg-amber-500 font-bold' : 'hover:bg-gray-700'}" 
-      on:click={() => selectedTemplate = 'modern'}
+
+    <button
+      class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200
+      {selectedTemplate === 'high-performer'
+        ? 'bg-white text-black shadow-sm'
+        : 'text-gray-400 hover:text-white hover:bg-white/5'}"
+      on:click={() => (selectedTemplate = 'high-performer')}
+    >
+      High Performer
+    </button>
+
+    <div class="w-px h-6 bg-[#27272a] mx-1 self-center"></div>
+
+    <button
+      class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200
+      {selectedTemplate === 'minimal'
+        ? 'bg-white text-black shadow-sm'
+        : 'text-gray-400 hover:text-white hover:bg-white/5'}"
+      on:click={() => (selectedTemplate = 'minimal')}
+    >
+      Minimal
+    </button>
+
+    <button
+      class="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200
+      {selectedTemplate === 'modern'
+        ? 'bg-white text-black shadow-sm'
+        : 'text-gray-400 hover:text-white hover:bg-white/5'}"
+      on:click={() => (selectedTemplate = 'modern')}
     >
       Modern
     </button>
   </div>
 
-  <div class="transform scale-[0.6] origin-top border border-gray-700 shadow-2xl">
-    {#if selectedTemplate === 'minimal'}
-      <TemplateMinimal />
-    {:else}
-      <TemplateModern />
-    {/if}
+  <div
+    class="flex-1 w-full overflow-y-auto flex justify-center pb-20 custom-scrollbar"
+  >
+    <div
+      class="transform scale-[0.6] origin-top transition-all duration-300 ease-in-out mt-4"
+    >
+      {#if selectedTemplate === 'ivy'}
+        <TemplateIvy />
+      {:else if selectedTemplate === 'high-performer'}
+        <TemplateHighPerformer />
+      {:else if selectedTemplate === 'minimal'}
+        <TemplateMinimal />
+      {:else if selectedTemplate === 'modern'}
+        <TemplateModern />
+      {/if}
+    </div>
   </div>
-
 </div>
+
+<style>
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #27272a;
+    border-radius: 20px;
+  }
+</style>
