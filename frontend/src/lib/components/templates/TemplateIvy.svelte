@@ -8,7 +8,7 @@
 <div
   class="h-full w-full bg-white text-gray-800"
   style="
-    /* The Parent Container controls the base size now */
+    /* The Parent Container controls the base size and color now */
     font-family: var(--font-body, serif); 
     line-height: var(--line-height, 1.5);
     font-size: var(--font-size, 10.5pt);
@@ -20,14 +20,16 @@
       {#if block.type === 'header'}
         <div class="text-center mb-8">
           <h1
-            class="font-bold uppercase tracking-widest mb-2 text-gray-900"
+            class="font-bold uppercase tracking-widest mb-2"
             style="font-size: 2.5em; line-height: 1.1;"
           >
             {block.data.name}
           </h1>
+
           <div class="italic mb-2 opacity-80" style="font-size: 1.1em;">
             {block.data.title}
           </div>
+
           <div
             class="flex flex-wrap justify-center gap-2 opacity-75"
             style="font-size: 0.85em;"
@@ -112,7 +114,6 @@
   :global(.rich-text p) {
     margin-bottom: 0.25em;
   }
-  /* Force rich text to inherit the slider size */
   :global(.rich-text) {
     font-size: 1em;
   }
