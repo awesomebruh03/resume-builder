@@ -1,2 +1,87 @@
 @import "tailwindcss";
-@plugin "daisyui"
+@plugin "daisyui";
+
+@theme {
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-body), ui-serif, Georgia, serif;
+  --font-mono: var(--font-body), ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  --font-body: "Inter", sans-serif;
+}
+
+/* --- THE NUCLEAR PRINT STYLESHEET --- */
+@media print {
+  /* 1. RESET THE PAGE */
+  @page {
+    margin: 0mm; /* Kills default browser headers/footers */
+    size: auto;  /* Respects A4/Letter size */
+  }
+
+  html, body {
+    background-color: white !important;
+    height: 100%;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  /* 2. HIDE THE UI */
+  /* Hide every element on the screen by default */
+  body * {
+    visibility: hidden;
+  }
+
+  /* 3. RESURRECT THE RESUME */
+  /* Un-hide ONLY the resume container and its children */
+  #resume-paper, #resume-paper * {
+    visibility: visible;
+  }
+
+  /* 4. POSITION & SCALE FIX (The Magic Part) */
+  #resume-paper {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+    
+    /* CRITICAL: Undo the scale(0.65) from your preview */
+    transform: none !important; 
+    
+    /* Force full width/height to fill the PDF page */
+    width: 100% !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    
+    /* Clean up visuals: No shadows, no guide lines, white background */
+    box-shadow: none !important;
+    background-image: none !important; 
+    background-color: white !important;
+    border: none !important;
+  }
+
+  /* 5. ATS FRIENDLY TEXT COLORS */
+  /* Forces the browser to print exact colors (no dimming/adjusting) */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* 6. INTELLIGENT PAGE BREAKS */
+  /* Prevents jobs from being cut in half */
+  .break-inside-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    display: block; 
+  }
+  
+  /* Prevent section titles from being orphaned at bottom of page */
+  h2, h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+}

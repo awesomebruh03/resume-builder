@@ -4,20 +4,23 @@ const defaultDesign = {
   template: 'ivy',
   themeColor: '#06b6d4',
   
-  // --- NEW TYPOGRAPHY OPTIONS ---
-  fontBody: 'font-sans', // The Font Family
-  fontSize: 10.5,        // Base size in pt
-  lineHeight: 1.4,       // Multiplier (e.g., 1.5)
-  pageMargin: 20,        // Padding in mm
-  textColor: '#1f2937',  // Body text color (Gray-800 default)
-  // -----------------------------
+  // TYPOGRAPHY
+  fontBody: 'Inter, sans-serif', // Updated default to match your new list
+  fontSize: 10.5,
+  lineHeight: 1.4,
+  pageMargin: 20,
+  textColor: '#1f2937',
 
+  // PAGE SETTINGS (NEW)
+  pageSize: 'A4', // 'A4' or 'Letter'
+
+  // LAYOUT
   sectionOrder: [
     { id: 'summary', name: 'Summary', visible: true },
     { id: 'experience', name: 'Experience', visible: true },
     { id: 'education', name: 'Education', visible: true },
     { id: 'skills', name: 'Skills', visible: true },
-    { id: 'custom', name: 'Custom', visible: true }
+    { id: 'custom', name: 'Custom Sections', visible: true } // Handles all custom sections
   ]
 };
 

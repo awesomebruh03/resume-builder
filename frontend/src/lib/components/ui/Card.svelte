@@ -16,22 +16,27 @@
   <div
     class="card-body bg-[#0e0e0f] border border-[#27272a] rounded-xl p-4 text-white h-full relative overflow-hidden"
   >
-    {#if title}
-      <h1
-        class="font-bold truncate text-sm uppercase tracking-wider mb-3 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-500"
-      >
-        {title}
-      </h1>
-    {/if}
+    <div class="mb-3 min-h-[1.5rem] flex items-center">
+      <slot name="title">
+        {#if title}
+          <h1
+            class="font-bold truncate text-sm uppercase tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-violet-500"
+          >
+            {title}
+          </h1>
+        {/if}
+      </slot>
+    </div>
+
     <div class="relative z-10">
       <slot></slot>
     </div>
+    
     <div class="card-actions justify-end"></div>
   </div>
 </div>
 
 <style>
-  /* This animation makes the RGB colors slowly shift around */
   @keyframes rgb-shift {
     0% {
       background-position: 0% 50%;

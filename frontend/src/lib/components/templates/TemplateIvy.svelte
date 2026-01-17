@@ -1,94 +1,100 @@
 <script>
-  import { resume } from '../../stores/resumeStore';
+  import { design } from '../../stores/designStore';
+
+  // DATA PROP: Received from the Paginator
+  export let blocks = [];
 </script>
 
-<div class="w-[210mm] min-h-[297mm] bg-white text-black p-[25mm] font-serif leading-relaxed shadow-2xl mx-auto">
-  
-  <div class="text-center mb-6">
-    <h1 class="text-3xl font-bold uppercase tracking-widest mb-2">{$resume.basics.name}</h1>
-    {#if $resume.basics.title}
-      <div class="text-lg italic text-gray-700 mb-2">{$resume.basics.title}</div>
-    {/if}
-    
-    <div class="text-sm flex flex-wrap justify-center gap-2 text-gray-800">
-      {#if $resume.basics.email}<span>{$resume.basics.email}</span>{/if}
-      {#if $resume.basics.phone}<span>• {$resume.basics.phone}</span>{/if}
-      {#if $resume.basics.location}<span>• {$resume.basics.location}</span>{/if}
-      {#each $resume.basics.links as link}
-        <span>• {link}</span>
-      {/each}
-    </div>
-  </div>
-
-  {#if $resume.summary}
-    <div class="mb-6">
-      <h2 class="text-center font-bold uppercase text-sm tracking-widest border-b-2 border-black pb-1 mb-3">Summary</h2>
-      <div class="text-sm text-justify rich-text">{@html $resume.summary}</div>
-    </div>
-  {/if}
-
-  {#if $resume.experience.length > 0}
-    <div class="mb-6">
-      <h2 class="text-center font-bold uppercase text-sm tracking-widest border-b-2 border-black pb-1 mb-4">Experience</h2>
-      <div class="flex flex-col gap-5">
-        {#each $resume.experience as job}
-          <div>
-            <div class="flex justify-between items-baseline font-bold">
-              <span class="text-lg">{job.company}</span>
-              <span class="text-sm text-gray-800">{job.location}</span>
-            </div>
-            <div class="flex justify-between items-baseline mb-2">
-              <span class="italic text-gray-800">{job.title}</span>
-              <span class="text-sm text-gray-800">{job.date}</span>
-            </div>
-            <div class="text-sm rich-text">{@html job.description}</div>
+<div
+  class="h-full w-full bg-white text-gray-800"
+  style="
+    /* Page Padding is now handled by the container in Preview.svelte, 
+       but we keep font styles here */
+    font-family: var(--font-body, serif); 
+    line-height: var(--line-height, 1.5);
+    font-size: var(--font-size, 10.5pt);
+    color: var(--text-color);
+  "
+>
+  {#each blocks as block (block.id)}
+    <div id="block-{block.id}" class="mb-4">
+      {#if block.type === 'header'}
+        <div class="text-center mb-8">
+          <h1
+            class="text-3xl font-bold uppercase tracking-widest mb-2 text-gray-900"
+          >
+            {block.data.name}
+          </h1>
+          <div class="text-lg italic mb-2 opacity-80">{block.data.title}</div>
+          <div class="text-sm flex flex-wrap justify-center gap-2 opacity-75">
+            {#if block.data.email}<span>{block.data.email}</span>{/if}
+            {#if block.data.phone}<span>• {block.data.phone}</span>{/if}
+            {#if block.data.location}<span>• {block.data.location}</span>{/if}
+            {#each block.data.links as link}<span>• {link}</span>{/each}
           </div>
-        {/each}
-      </div>
-    </div>
-  {/if}
-
-  {#if $resume.education.length > 0}
-    <div class="mb-6">
-      <h2 class="text-center font-bold uppercase text-sm tracking-widest border-b-2 border-black pb-1 mb-4">Education</h2>
-      {#each $resume.education as edu}
-        <div class="mb-4">
-          <div class="flex justify-between font-bold">
-            <span>{edu.school}</span>
-            <span class="text-sm font-normal">{edu.date}</span>
-          </div>
-          <div class="italic text-sm">{edu.degree} in {edu.major}</div>
         </div>
-      {/each}
-    </div>
-  {/if}
-
-  {#if $resume.skills}
-    <div class="mb-6">
-      <h2 class="text-center font-bold uppercase text-sm tracking-widest border-b-2 border-black pb-1 mb-3">Skills</h2>
-      <div class="text-sm text-center">{@html $resume.skills}</div>
-    </div>
-  {/if}
-
-  {#each $resume.custom as section}
-    <div class="mb-6">
-      <h2 class="text-center font-bold uppercase text-sm tracking-widest border-b-2 border-black pb-1 mb-4">{section.title}</h2>
-      {#each section.items as item}
-         <div class="mb-3">
-            <div class="flex justify-between font-bold text-sm">
-               <span>{item.title}</span>
-               <span>{item.date}</span>
-            </div>
-            <div class="italic text-sm mb-1">{item.subtitle}</div>
-            <div class="text-sm rich-text">{@html item.description}</div>
-         </div>
-      {/each}
+      {:else if block.type === 'section-title'}
+        <div class="mt-2">
+          <h2
+            class="section-title text-center font-bold uppercase text-sm tracking-widest border-b-2 pb-1 mb-4"
+            style="border-color: var(--theme-color);"
+          >
+            {block.content}
+          </h2>
+        </div>
+      {:else if block.type === 'summary'}
+        <div class="text-justify rich-text">
+          {@html block.content}
+        </div>
+      {:else if block.type === 'experience'}
+        <div>
+          <div class="flex justify-between items-baseline font-bold">
+            <span class="text-lg">{block.data.company}</span>
+            <span class="text-sm font-normal opacity-75"
+              >{block.data.location}</span
+            >
+          </div>
+          <div class="flex justify-between items-baseline mb-2">
+            <span class="italic font-medium opacity-90">{block.data.title}</span
+            >
+            <span class="text-sm opacity-75">{block.data.date}</span>
+          </div>
+          <div class="rich-text opacity-90">{@html block.data.description}</div>
+        </div>
+      {:else if block.type === 'education'}
+        <div>
+          <div class="flex justify-between font-bold">
+            <span>{block.data.school}</span>
+            <span class="text-sm font-normal opacity-75">{block.data.date}</span
+            >
+          </div>
+          <div class="italic text-sm mt-1 opacity-90">
+            {block.data.degree} in {block.data.major}
+          </div>
+        </div>
+      {:else if block.type === 'skills'}
+        <div class="text-center rich-text">{@html block.content}</div>
+      {:else if block.type === 'custom'}
+        <div class="mb-4">
+          <div class="flex justify-between font-bold text-sm">
+            <span>{block.data.title}</span>
+            <span class="font-normal opacity-75">{block.data.date}</span>
+          </div>
+          <div class="italic text-sm opacity-80">{block.data.subtitle}</div>
+          <div class="rich-text opacity-90">{@html block.data.description}</div>
+        </div>
+      {/if}
     </div>
   {/each}
-
 </div>
 
 <style>
-  :global(.rich-text ul) { list-style-type: disc; margin-left: 1.5em; }
-  :global(.rich-text p) { margin-bottom: 0.25em; }
+  :global(.rich-text ul) {
+    list-style-type: disc;
+    margin-left: 1.2em;
+    margin-top: 0.25em;
+  }
+  :global(.rich-text p) {
+    margin-bottom: 0.25em;
+  }
 </style>

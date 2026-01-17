@@ -4,11 +4,10 @@
   import RichTextEditor from './ui/RichTextEditor.svelte';
   import 'iconify-icon';
 
-  // 1. IMPORT THE STORE (Replaces local state)
-  // Ensure this path matches where you created the store file
+  // 1. IMPORT THE STORE
   import { resume } from '../stores/resumeStore';
 
-  // 2. UI STATE (Local only, we don't need to save "what is open" to disk)
+  // 2. UI STATE
   let activeBlock = null; 
 
   // Global closer
@@ -38,7 +37,7 @@
     if (e.key === 'Enter') closeAll();
   }
 
-  // --- ACTIONS (Updated to use $resume) ---
+  // --- ACTIONS ---
   
   function addLink() { 
     $resume.basics.links = [...$resume.basics.links, '']; 
@@ -65,7 +64,7 @@
   }
 
   function addCustomSection() { 
-    $resume.custom = [...$resume.custom, { id: Date.now(), title: 'Untitled Section', items: [] }]; 
+    $resume.custom = [...$resume.custom, { id: Date.now(), title: '', items: [] }]; 
   }
   
   function removeCustomSection(id) { 
@@ -266,8 +265,15 @@
     {#each $resume.custom as section (section.id)}
       <Card title="">
         <div slot="title" class="flex items-center gap-2 w-full pr-8">
-          <input type="text" class="input input-ghost input-sm w-full font-bold text-gray-700 px-0 focus:bg-transparent" bind:value={section.title} on:click={keepOpen} />
+          <input 
+            type="text" 
+            class="input input-ghost input-sm w-full font-bold text-gray-100 px-0 focus:bg-transparent placeholder:text-gray-500" 
+            bind:value={section.title} 
+            on:click={keepOpen}
+            placeholder="Section Name (e.g. Publications)" 
+          />
         </div>
+        
         <button class="btn btn-xs btn-circle btn-ghost absolute top-4 right-4 text-error" on:click={() => removeCustomSection(section.id)}>✕</button>
 
         <div class="flex flex-col gap-3 mt-2">
@@ -278,7 +284,7 @@
                  on:click={(e) => openItem(e, item.id)}
                >
                   <div class="truncate pr-2">
-                     <div class="font-bold text-sm text-gray-800 truncate">{item.title || 'New Item'}</div>
+                     <div class="font-bold text-sm text-gray-200 truncate">{item.title || 'New Item'}</div>
                      <div class="text-xs text-gray-500 truncate">{item.subtitle || 'Subtitle'}</div>
                   </div>
                   <div class="opacity-0 group-hover:opacity-100 transition-opacity">
@@ -290,10 +296,26 @@
             {:else}
                <div class="p-4 bg-base-100 rounded-lg shadow-xl ring-1 ring-black/5 relative" on:click={keepOpen}>
                   <div class="flex flex-col gap-3">
-                     <input type="text" placeholder="Title" class="input input-bordered input-sm w-full font-bold" bind:value={item.title} />
-                     <input type="text" placeholder="Subtitle" class="input input-bordered input-sm w-full" bind:value={item.subtitle} />
-                     <input type="text" placeholder="Date" class="input input-bordered input-sm w-full" bind:value={item.date} />
+                     
+                     <label class="form-control w-full">
+                       <div class="label py-0 pb-1"><span class="label-text text-[10px] uppercase font-bold text-gray-500">Item Title</span></div>
+                       <input type="text" placeholder="e.g. Project Name / Book Title" class="input input-bordered input-sm w-full font-bold" bind:value={item.title} />
+                     </label>
+
+                     <div class="grid grid-cols-3 gap-2">
+                        <label class="form-control w-full col-span-2">
+                            <div class="label py-0 pb-1"><span class="label-text text-[10px] uppercase font-bold text-gray-500">Subtitle / Role</span></div>
+                            <input type="text" placeholder="e.g. Publisher / Role" class="input input-bordered input-sm w-full" bind:value={item.subtitle} />
+                        </label>
+                        
+                        <label class="form-control w-full">
+                            <div class="label py-0 pb-1"><span class="label-text text-[10px] uppercase font-bold text-gray-500">Date</span></div>
+                            <input type="text" placeholder="2023" class="input input-bordered input-sm w-full" bind:value={item.date} />
+                        </label>
+                     </div>
+
                      <div class="mt-1">
+                        <div class="label py-0 pb-1"><span class="label-text text-[10px] uppercase font-bold text-gray-500">Description</span></div>
                         <RichTextEditor bind:value={item.description} placeholder="Description..." />
                      </div>
                   </div>
