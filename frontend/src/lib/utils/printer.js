@@ -1,110 +1,69 @@
-export function printResume(design) {
-  // 1. Get the Resume Content
+// 1. Import the auto-generated Go binding
+import { GeneratePDF } from '../../../wailsjs/go/main/App';
+
+export async function printResume(design) {
   const printContent = document.getElementById('print-container');
   if (!printContent) {
     console.error("Print container not found!");
     return;
   }
 
-  // 2. Create a hidden IFrame
-  const iframe = document.createElement('iframe');
-  iframe.style.position = 'fixed';
-  iframe.style.right = '0';
-  iframe.style.bottom = '0';
-  iframe.style.width = '0'; 
-  iframe.style.height = '0';
-  iframe.style.border = '0';
-  document.body.appendChild(iframe);
-
-  // 3. Get the Document inside the IFrame
-  const doc = iframe.contentWindow.document;
-
-  // 4. Gather all Styles
+  // 2. Gather Styles (Tailwind + Component CSS)
+  // We need to pass the styles to the backend so the PDF looks right
   let styles = '';
   document.querySelectorAll('style, link[rel="stylesheet"]').forEach(node => {
     styles += node.outerHTML;
   });
 
-  // 5. Determine Page Size
+  // 3. Check Page Size
   const isLetter = design?.pageSize === 'Letter';
-  const width = isLetter ? '215.9mm' : '210mm';
-  const height = isLetter ? '279.4mm' : '297mm';
 
-  // 6. Write the Clean HTML
-  doc.open();
-  doc.write(`
+  // 4. Construct the Full HTML String
+  // This creates a standalone HTML page that the headless browser will load
+  const fullHTML = `
     <!DOCTYPE html>
     <html>
       <head>
+        <meta charset="UTF-8">
         <title>Resume Export</title>
         ${styles}
         <style>
-            /* OVERRIDE GLOBAL PRINT HIDING */
-            * { visibility: visible !important; }
-
-            /* KILL BROWSER MARGINS */
-            @page { margin: 0; size: auto; }
-            
+            /* FORCE RESET FOR PDF */
             body { 
                 margin: 0; 
                 padding: 0; 
                 background: white; 
-                -webkit-print-color-adjust: exact;
+                -webkit-print-color-adjust: exact; 
                 print-color-adjust: exact;
             }
             
             /* RESET WRAPPERS */
-            /* This targets the 'relative group' divs from Svelte to stop them from messing up spacing */
-            body > div {
-                margin: 0 !important;
-                padding: 0 !important;
-                display: block !important;
-            }
-
-            /* ENSURE EXACT DIMENSIONS */
+            /* Ensure the resume paper takes up the full PDF page */
             .resume-paper {
-                margin: 0 auto;
+                margin: 0 !important;
                 box-shadow: none !important;
-                margin-bottom: 0 !important;
-                break-after: page; 
-                page-break-after: always;
-                position: relative !important;
-                transform: none !important; 
-                
-                /* DYNAMIC SIZE */
-                width: ${width} !important;
-                min-height: ${height} !important;
-                
-                overflow: hidden;
-                background: white;
+                width: 100% !important;
+                /* Remove fixed heights so content flows naturally */
+                min-height: 100vh; 
             }
 
-            /* HIDE UI ELEMENTS (Like Page Labels) */
+            /* Hide UI helpers like "Page 1" labels */
             .resume-paper + div { display: none !important; }
-            .resume-paper:last-child { break-after: auto; }
         </style>
       </head>
       <body>
         ${printContent.innerHTML}
       </body>
     </html>
-  `);
-  doc.close();
+  `;
 
-  // 7. SMART PRINT TRIGGER
-  iframe.onload = () => {
-    const win = iframe.contentWindow;
-    
-    // Wait for fonts to be ready
-    win.document.fonts.ready.then(() => {
-        // Extra buffer for images/icons
-        setTimeout(() => {
-            win.focus();
-            win.print();
-            
-            // Cleanup (Optional)
-            setTimeout(() => document.body.removeChild(iframe), 2000);
-        }, 500);
-    });
-  };
+  // 5. Send to Go Backend
+  try {
+    // This calls App.GeneratePDF(html, isLetter) in Go
+    await GeneratePDF(fullHTML, isLetter);
+    alert("PDF Saved Successfully!");
+  } catch (e) {
+    console.error(e);
+    alert("PDF Generation Failed: " + e);
+  }
 }

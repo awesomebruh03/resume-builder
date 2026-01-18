@@ -3,7 +3,20 @@
   import { design } from '../stores/designStore';
   import { resume } from '../stores/resumeStore';
   import { flattenResume, paginateBlocks } from '../../lib/utils/paginator';
+
+  // 1. Import All Templates
   import TemplateIvy from './templates/TemplateIvy.svelte';
+  import TemplateModern from './templates/TemplateModern.svelte';
+  import TemplateHighPerformer from './templates/TemplateHighPerformer.svelte';
+  import TemplateMinimal from './templates/TemplateMinimal.svelte';
+
+  // 2. Map Template IDs to Components
+  const templateComponents = {
+    ivy: TemplateIvy,
+    modern: TemplateModern,
+    'high-performer': TemplateHighPerformer,
+    minimal: TemplateMinimal,
+  };
 
   const sizes = {
     A4: { w: '210mm', h: '297mm' },
@@ -16,39 +29,35 @@
   let ghostContainer;
 
   async function runPagination() {
-    if ($design.template !== 'ivy') return;
+    // Check if the selected template exists in our map
+    if (!templateComponents[$design.template]) return;
 
     const allBlocks = flattenResume($resume, $design.sectionOrder);
 
-    // 1. Render Ghost
+    // 1. Render Ghost (Render everything in one go to measure it)
     pages = [allBlocks];
     await tick();
 
-    // 2. Measure The "Container" (Find out exactly how many PX is 297mm)
+    // 2. Measure The "Container"
     const pagePixelHeight = ghostContainer.getBoundingClientRect().height;
 
-    // Calculate Content Area (Page Height - Top/Bottom Padding)
+    // Calculate Content Area
     const paddingMm = $design.pageMargin * 2;
     const pageHeightMm = $design.pageSize === 'Letter' ? 279.4 : 297;
-
-    // Ratio: If 297mm = 1122px, then PaddingPx = (PaddingMm / 297) * 1122
     const paddingPx = (paddingMm / pageHeightMm) * pagePixelHeight;
-
-    // Safety Buffer (Prevent bleeding at the very edge)
     const safetyBufferPx = 20;
 
     const maxContentHeightPx = pagePixelHeight - paddingPx - safetyBufferPx;
 
-    // 3. Measure Blocks (INCLUDING MARGINS!)
+    // 3. Measure Blocks
     const heightMap = {};
     allBlocks.forEach((block) => {
+      // This selector works because ALL templates now wrap items in id="block-{id}"
       const el = ghostContainer.querySelector(`#block-${block.id}`);
       if (el) {
-        // Get accurate style (height + margin)
         const style = window.getComputedStyle(el);
         const marginTop = parseFloat(style.marginTop) || 0;
         const marginBottom = parseFloat(style.marginBottom) || 0;
-
         heightMap[block.id] = el.offsetHeight + marginTop + marginBottom;
       }
     });
@@ -77,8 +86,11 @@
       --line-height: {$design.lineHeight};
     "
   >
-    {#if $design.template === 'ivy'}
-      <TemplateIvy blocks={flattenResume($resume, $design.sectionOrder)} />
+    {#if templateComponents[$design.template]}
+      <svelte:component
+        this={templateComponents[$design.template]}
+        blocks={flattenResume($resume, $design.sectionOrder)}
+      />
     {/if}
   </div>
 
@@ -86,7 +98,7 @@
     id="print-container"
     class="flex-1 w-full overflow-y-auto flex flex-col items-center gap-10 custom-scrollbar pb-20"
   >
-    {#if $design.template === 'ivy'}
+    {#if templateComponents[$design.template]}
       {#each pages as pageBlocks, i}
         <div class="relative group">
           <div
@@ -105,7 +117,10 @@
                --line-height: {$design.lineHeight};
              "
           >
-            <TemplateIvy blocks={pageBlocks} />
+            <svelte:component
+              this={templateComponents[$design.template]}
+              blocks={pageBlocks}
+            />
           </div>
 
           <div
@@ -116,7 +131,7 @@
         </div>
       {/each}
     {:else}
-      <div class="text-white">Template not updated for pagination yet</div>
+      <div class="text-white mt-20">Select a template to begin</div>
     {/if}
   </div>
 </div>
